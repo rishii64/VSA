@@ -217,7 +217,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const quizAnswers = {
         'quiz1-q1': 'b',
         'quiz1-q2': 'b',
-        'quiz2-q1': 'a'
+        'quiz1-q3': 'd',
+        'quiz1-q4': 'a',
+        'quiz1-q5': 'a',
+        'quiz1-q6': 'c',
+        'quiz2-q7': 'a',
+        'quiz2-q8': 'c',
+        'quiz2-q9': 'a',
+        'quiz2-q10': 'b',
     };
 
     // Submit quiz buttons
