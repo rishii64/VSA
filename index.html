@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSA Training Module</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="test2.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <img class="logo" src="./cargill.jpg" alt="">
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Know My Risk - <br> Veterinary Sales Advisor</h3>
+                    <button class="hide-sidebar"><i class="fas fa-times"></i></button>
+                </div>
+                <ul class="modules-list">
+                    <li class="module active" data-module="overview">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <span>Overview</span>
+                    </li>
+                    <li class="module" data-module="intro">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <div>
+                            <span>Introduction to VSA</span> <br>
+                            <span class="duration">1 min</span>
+                        </div>
+                    </li>
+                    <li class="module" data-module="hazards1">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <div>
+                            <span>Hazards and Preventive measures 1</span> <br>
+                            <span class="duration">4 mins</span>
+                        </div>
+                    </li>
+                    <li class="module" data-module="quiz1">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <span>Quiz: Hazards and Preventive measures</span>
+                    </li>
+                    <li class="module" data-module="hazards2">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <div>
+                            <span>Hazards and Preventive measures 2</span> <br>
+                            <span class="duration">3 mins</span>
+                        </div>
+                    </li>
+                    <li class="module" data-module="quiz2">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <span>Quiz: Hazards and Preventive measures 2</span>
+                    </li>
+                </ul>
+            </aside>
+
+            <div class="right_side">
+                <section>
+                    <div class="info_box">
+                        <button class="show-sidebar"> <i class="fas fa-bars"></i></button>
+                        <p>VSA Training Module</p>
+                        <i class="fas fa-chevron-right"></i>
+                        <div class="current-module">Overview</div>
+                    </div>
+                    <button class="next-btn" disabled>Next ></button>
+                </section>
+                <!-- Content Area -->
+                <div class="content-area">
+                    <!-- Welcome Screen -->
+                    <div class="module-content active" id="overview">
+                        <h1>Welcome to the Veterinary Sales Advisor (VSA) Training Module</h1>
+                        <p>This program is designed to equip you with the knowledge, skills, and awareness needed to
+                            excel in your role. As a VSA, you play a key part in supporting animal health and building
+                            lasting
+                            relationships with clients across diverse environments — from retail counters and farms to
+                            hospitals and clinics.</p>
+                        <p>Through this module, you will gain a clear understanding of your responsibilities, daily
+                            field activities, client interactions, safety protocols, and potential risks. Whether you're
+                            new
+                            to the role or looking to strengthen your foundation, this training will guide you
+                            step-by-step
+                            toward becoming a confident, effective, and safety-conscious professional in the field.</p>
+                        <p>Let's get started on this journey together!</p>
+                    </div>
+
+                    <!-- Video 1 -->
+                    <div class="module-content" id="intro">
+                        <div class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <p>Video: Introduction to VSA (1 min)</p>
+                            </div>
+                            <video class="video-player" controlslist="nodownload noremoteplayback noplaybackrate"
+                                controls>
+                                <source src="./animated.mp4" type="video/mp4">
+                                <!-- <source src="./VSA_Introduction.mp4" type="video/mp4"> -->
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Video 2 -->
+                    <div class="module-content" id="hazards1">
+                        <div class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <p>Video: Hazards and Preventive measures 1 (4 mins)</p>
+                            </div>
+                            <video class="video-player" controlslist="nodownload noremoteplayback noplaybackrate"
+                                controls>
+                                <!-- <source src="./Hazard 1.mp4" type="video/mp4"> -->
+                                <source src="./animated.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 1 -->
+                    <div class="module-content" id="quiz1">
+                        <div class="quiz-preview">
+                            <div class="recap-icon">📚</div>
+                            <h2>Let's recap what you have learned so far</h2>
+                            <p>Get ready for a quick quiz to test your knowledge!</p>
+                            <div class="countdown">Starting in 5...</div>
+                        </div>
+                        <div class="quiz-container">
+                            <!-- Question 1 -->
+                            <div class="question_box" data-question-index="0">
+                                <img src="./approaching3.jpg" alt="farmer approaching cow" class="quiz-image">
+                                <div class="question" data-question-index="0" data-audio="./q1.mp3">
+                                    <p style="font-size: 1.5rem;">How should you approach animals in the fields?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="a">
+                                            <span>Quickly to avoid startling them</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="b">
+                                            <span>Calmly, with protective gear and proper training</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="c">
+                                            <span>Loudly so they notice you</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="d">
+                                            <span>Never, always call for help</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Question 2 -->
+                            <div class="question_box" data-question-index="1" style="display: none;">
+                                <img src="./driving.jpg" alt="driving safely" class="quiz-image">
+                                <div class="question" data-question-index="1" data-audio="./q2.mp3">
+                                    <p style="font-size: 1.5rem;">What is a key safety tip while driving during field
+                                        visits?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="b">
+                                            <span>Follow traffic laws and use IVMS e-mentor</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="a">
+                                            <span>Speed up to cover more clients</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="c">
+                                            <span>Use mobile while driving to save time</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="d">
+                                            <span>Avoid rest breaks to stay on schedule</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Quiz 1 Completion Screen -->
+                        <div class="quiz-completion" style="display: none;">
+                            <div class="trophy">🏆</div>
+                            <h1>Congratulations!</h1>
+                            <p>You've successfully completed the quiz.<br>Now let's move forward to the next module.</p>
+                            <!-- <button class="continue-btn">Continue</button> -->
+                        </div>
+                    </div>
+
+                    <!-- Video 3 -->
+                    <div class="module-content" id="hazards2">
+                        <div class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <p>Video: Hazards and Preventive measures 2 (3 mins)</p>
+                            </div>
+                            <video class="video-player" controlslist="nodownload noremoteplayback noplaybackrate"
+                                controls>
+                                <!-- <source src="./hazards 2.mp4" type="video/mp4"> -->
+                                <source src="./animated.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 2 -->
+                    <div class="module-content" id="quiz2">
+                        <div class="quiz-preview">
+                            <div class="recap-icon">📚</div>
+                            <h2>Let's recap what you have learned so far</h2>
+                            <p>Get ready for a quick quiz to test your knowledge!</p>
+                            <div class="countdown">Starting in 5...</div>
+                        </div>
+                        <div class="quiz-container">
+                            <!-- question 1 -->
+                            <div class="question_box" data-question-index="0">
+                                <img src="./heat_stress.jpg" alt="heat stress" class="quiz-image">
+                                <div class="question" data-question-index="0" data-audio="./q3.mp3">
+                                    <p style="font-size: 1.5rem;">What should you avoid to prevent heat stress?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="a">
+                                            <span>Drinking caffeine or alcohol</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="b">
+                                            <span>Wearing a cap</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="c">
+                                            <span>Taking breaks</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="d">
+                                            <span>Hydrating</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- question 2 -->
+                            <div class="question_box" data-question-index="1" style="display: none;">
+                                <img src="./slip.jpg" alt="heat stress" class="quiz-image">
+                                <div class="question" data-question-index="1" data-audio="./q4.mp3">
+                                    <p style="font-size: 1.4rem;">Which of the following is recommended to prevent slips
+                                        and falls?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="a">
+                                            <span>High-heeled shoes</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="b">
+                                            <span>Rubber slippers</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="c">
+                                            <span>Non-slip shoes and staying alert</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="d">
+                                            <span>Barefoot walking</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Quiz 2 Completion Screen -->
+                        <div class="quiz-completion" style="display: none;">
+                            <div class="trophy">🏆</div>
+                            <h1>Congratulations!</h1>
+                            <p>You've successfully completed the quiz.<br>
+                                <!-- Now let's move forward to the next module. -->
+                                Thank you for completing this training module. Good Luck 👍
+                            </p>
+                            <!-- <button class="continue-btn">Continue</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="test2.js"></script>
+</body>
+
+</html>

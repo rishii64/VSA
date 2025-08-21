@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSA Training Module</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #0056D2;
+            --accent-color: #e74c3c;
+            --light-color: #EDF8E9;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --sidebar-width: 350px;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            /* background-color: rgba(255, 253, 225, 0.856); */
+            background-color: rgb(--light-color);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            height: 70px;
+            /* background-color: var(--primary-color); */
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+            border-bottom: 1px solid #000;
+        }
+
+        .logo {
+            width: 120px;
+            margin: .5rem 0;
+        }
+
+        .navbar-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        /* Hamburger Menu */
+        .hamburger-menu {
+            /* color: white; */
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 0.1rem 1rem;
+            display: none;
+            border-radius: 5px;
+            background-color: red;
+        }
+
+        /* Quiz Feedback */
+        .quiz-feedback {
+            /* margin-top: 1.5rem; */
+            padding: 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .quiz-feedback.incorrect {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        /* Quiz Option Feedback */
+        .option.correct {
+            background-color: rgba(39, 174, 96, 0.1);
+            border-color: var(--success-color);
+        }
+
+        .option.incorrect {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .option.selected {
+            /* border-color: var(--secondary-color); */
+            background-color: #f0f7ff;
+        }
+
+        /* Update the media query to show hamburger menu */
+        @media (max-width: 992px) {
+            .hamburger-menu {
+                display: block;
+            }
+
+            .show-sidebar {
+                display: none;
+                /* Hide the other menu button */
+            }
+        }
+
+        /* .current-module {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: 500;
+} */
+
+        .next-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            height: 35px;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .next-btn:hover {
+            background-color: #2980b9;
+            transform: translateX(2px);
+        }
+
+        .next-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            height: calc(100vh - 70px);
+            display: flex;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            margin: 1rem 0 2rem 1rem;
+            border-radius: 20px;
+            background-color: #afc8ec;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-speed) ease;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+            position: relative;
+            z-index: 10;
+            color: black;
+            scrollbar-width: none;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* border-bottom: 1px solid #000000; */
+        }
+
+        .sidebar-header h3 {
+            /* color: var(--primary-color); */
+            font-size: 1.5rem;
+        }
+
+        .hide-sidebar {
+            background: none;
+            border: none;
+            /* color: #7f8c8d; */
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .modules-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .module {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+            transition: all var(--transition-speed) ease;
+            border-left: 4px solid transparent;
+        }
+
+        .module:hover {
+            background-color: #f8f9fa;
+        }
+
+        .module.active {
+            background-color: #0d66e352;
+            border-left: 4px solid var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .module span {
+            flex-grow: 1;
+        }
+
+        .duration {
+            font-size: 0.8rem;
+            /* color: #7f8c8d; */
+            /* margin-left: 0.5rem; */
+        }
+
+        .completed-icon {
+            display: none;
+            margin-right: 0.8rem;
+            color: #bdc3c7;
+            font-size: 1.2rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .module.completed .completed-icon {
+            /* color: var(--success-color); */
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .show-sidebar {
+            top: 70px;
+            left: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.3rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .right_side {
+            width: calc(100vw - var(--sidebar-width));
+        }
+
+        .right_side section {
+            /* border: 1px solid red; */
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .info_box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .info_box p,
+        .info_box .current-module {
+            color: #2952b9;
+        }
+
+        /* Content Area Styles */
+        .content-area {
+            flex-grow: 1;
+            padding: 0 2rem;
+            margin: 1rem;
+            border-radius: 8px;
+            overflow-y: auto;
+            height: calc(100vh - 160px);
+        }
+
+        .module-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            opacity: 0;
+            /* transform: translateY(10px); */
+        }
+
+        #overview {
+            width: calc(80vw - var(--sidebar-width));
+            /* padding: 0 2rem; */
+            margin: auto;
+        }
+
+        .module-content.active {
+            display: block;
+        }
+
+        .module-content.fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .module-content h1,
+        .module-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .module-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            font-size: large;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        /* Video Styles */
+        .video-container {
+            /* margin: 2rem 0; */
+            border-radius: 8px;
+            overflow: hidden;
+            /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); */
+        }
+
+        .video-placeholder {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            /* height: 550px; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .video-placeholder:hover {
+            transform: scale(1.01);
+        }
+
+        .video-placeholder i {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .video-placeholder p {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .video-player {
+            width: 100%;
+            display: none;
+        }
+
+        .video-placeholder,
+        .video-player {
+            height: 550px;
+        }
+
+        /* Quiz Preview Screen Styles */
+        .quiz-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 550px;
+            background-color: rgb(255, 255, 255);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+
+            background-image: linear-gradient(90deg, #6C63FF, #FF6584);
+            background-repeat: no-repeat;
+            background-size: 100% 5px;
+            background-position: top;
+        }
+
+        .quiz-preview h2 {
+            font-size: 2.2rem;
+            /* color: #0056D2; */
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--dark);
+            background: linear-gradient(90deg, #6C63FF, #FF6584);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow:
+                3px 3px 0px rgba(0, 0, 0, 0.1),
+                9px 9px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-preview p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .recap-icon {
+            font-size: 72px;
+            margin-bottom: 10px;
+            color: var(--primary);
+            animation: float 4s infinite ease-in-out;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .countdown {
+            font-size: 1.5rem;
+            font-weight: bold;
+            /* color: #0056D2; */
+            color: white;
+            background: #6C63FF;
+            padding: .5rem 2.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+            animation: ripple 2s infinite;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            display: flex !important;
+            /* gap: 3rem; */
+            border-radius: 8px;
+            /* box-shadow: 0 2px 10px rgba(225, 60, 60, 0.05); */
+            align-items: flex-start;
+            flex-direction: row;
+            padding: 1rem;
+        }
+
+        .question_box {
+            display: flex;
+            flex-grow: 1;
+            gap: 3rem;
+        }
+
+        .question_box.active {
+            display: flex;
+        }
+
+        .quiz-image {
+            max-width: 100%;
+            height: 65vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .question {
+            /* margin: 1rem 0; */
+            display: flex;
+            flex-direction: column;
+            /* height: 90vh; */
+        }
+
+        .question p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: .9rem;
+            /* background-color: white; */
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            /* border: 1px solid #ddd; */
+        }
+
+        .option:hover {
+            /* border-color: var(--secondary-color); */
+            background-color: #f0f7ff;
+        }
+
+        .option input {
+            margin-right: 1rem;
+        }
+
+        .submit-quiz {
+            background-color: var(--secondary-color);
+            width: 120px;
+            margin: auto;
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .submit-quiz:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* completion screen */
+        .quiz-completion {
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #6C63FF, #FF6584);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            background: white;
+            box-shadow: 0 20px 40px rgba(108, 99, 255, 0.15);
+            position: relative;
+            animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #6C63FF;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .trophy {
+            font-size: 100px;
+            margin-bottom: 10px;
+            color: #FFC107;
+            filter: drop-shadow(0 5px 15px rgba(255, 193, 7, 0.4));
+            transform: scale(0);
+            animation: trophyPop 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.3s forwards;
+        }
+
+        @keyframes trophyPop {
+            to {
+                transform: scale(1) rotate(10deg);
+            }
+        }
+
+        .quiz-completion h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #6C63FF, #FF6584);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .quiz-completion h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #6C63FF, #FF6584);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: underline 1s ease-out 0.8s forwards;
+        }
+
+        @keyframes underline {
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        .quiz-completion p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #4A5568;
+            margin-bottom: 32px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .continue-btn {
+            border: 1px solid red;
+            background: linear-gradient(90deg, #6C63FF, #FF6584);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            /* height: 50px;
+    width: 130px; */
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 5px rgba(108, 99, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease;
+            animation: fadeInUp 0.6s ease-out 1s forwards;
+        }
+
+        .quiz-completion button:hover {
+            opacity: 1;
+            transform: translateY(-3px);
+            background: linear-gradient(90deg, #FF6584, #6C63FF);
+            /* box-shadow: 0 15px 30px rgba(108, 99, 255, 0.3); */
+        }
+
+
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                transform: translateX(-110%);
+                height: calc(100vh - 80px);
+                z-index: 100;
+                margin: .2rem auto;
+                padding-bottom: 1.5rem;
+            }
+
+            .sidebar.show {
+                transform: translateX(2px);
+            }
+
+            .hide-sidebar {
+                display: block;
+            }
+
+            .show-sidebar {
+                display: block;
+            }
+
+            .sidebar-header {
+                font-size: 1rem;
+            }
+
+            .content-area {
+                margin: 1rem 0;
+                width: 100%;
+            }
+
+            #overview {
+                width: 90%;
+            }
+
+            .right_side {
+                width: 100%;
+            }
+
+            .quiz-container,
+            .question_box {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .quiz-image {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar-title {
+                font-size: 1rem;
+            }
+
+            .info_box,
+            .current-module {
+                font-size: 0.9rem;
+            }
+
+            .next-btn {
+                padding: 0.5rem 1rem;
+            }
+
+            .content-area {
+                padding: 1.5rem;
+            }
+
+            .quiz-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .info_box,
+            .current-module {
+                font-size: 15px;
+            }
+
+            .next-btn {
+                padding: 5px 10px;
+            }
+
+            .quiz-completion {
+                height: calc(100vh - 105px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <img class="logo" src="./cargill.jpg" alt="">
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Know My Risk - <br> Veterinary Sales Advisor</h3>
+                    <button class="hide-sidebar"><i class="fas fa-times"></i></button>
+                </div>
+                <ul class="modules-list">
+                    <li class="module active" data-module="overview">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <span>Overview</span>
+                    </li>
+                    <li class="module" data-module="intro">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <div>
+                            <span>Introduction to VSA</span> <br>
+                            <span class="duration">1 min</span>
+                        </div>
+                    </li>
+                    <li class="module" data-module="hazards1">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <div>
+                            <span>Hazards and Preventive measures 1</span> <br>
+                            <span class="duration">4 mins</span>
+                        </div>
+                    </li>
+                    <li class="module" data-module="quiz1">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <span>Quiz: Hazards and Preventive measures</span>
+                    </li>
+                    <li class="module" data-module="hazards2">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <div>
+                            <span>Hazards and Preventive measures 2</span> <br>
+                            <span class="duration">3 mins</span>
+                        </div>
+                    </li>
+                    <li class="module" data-module="quiz2">
+                        <i class="fa-solid fa-square-check completed-icon"></i>
+                        <span>Quiz: Hazards and Preventive measures 2</span>
+                    </li>
+                </ul>
+            </aside>
+
+            <div class="right_side">
+                <section>
+                    <div class="info_box">
+                        <button class="show-sidebar"> <i class="fas fa-bars"></i></button>
+                        <p>VSA Training Module</p>
+                        <i class="fas fa-chevron-right"></i>
+                        <div class="current-module">Overview</div>
+                    </div>
+                    <button class="next-btn" disabled>Next ></button>
+                </section>
+                <!-- Content Area -->
+                <div class="content-area">
+                    <!-- Welcome Screen -->
+                    <div class="module-content active" id="overview">
+                        <h1>Welcome to the Veterinary Sales Advisor (VSA) Training Module</h1>
+                        <p>This program is designed to equip you with the knowledge, skills, and awareness needed to
+                            excel in your role. As a VSA, you play a key part in supporting animal health and building
+                            lasting
+                            relationships with clients across diverse environments — from retail counters and farms to
+                            hospitals and clinics.</p>
+                        <p>Through this module, you will gain a clear understanding of your responsibilities, daily
+                            field activities, client interactions, safety protocols, and potential risks. Whether you're
+                            new
+                            to the role or looking to strengthen your foundation, this training will guide you
+                            step-by-step
+                            toward becoming a confident, effective, and safety-conscious professional in the field.</p>
+                        <p>Let's get started on this journey together!</p>
+                    </div>
+
+                    <!-- Video 1 -->
+                    <div class="module-content" id="intro">
+                        <div class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <p>Video: Introduction to VSA (1 min)</p>
+                            </div>
+                            <video class="video-player" controlslist="nodownload noremoteplayback noplaybackrate"
+                                controls>
+                                <!-- <source src="./animated.mp4" type="video/mp4"> -->
+                                <!-- <source src="./VSA_Introduction.mp4" type="video/mp4"> -->
+                                <source src="https://stenciideployment.s3.ap-south-1.amazonaws.com/VSA_Introduction.mp4"
+                                    type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Video 2 -->
+                    <div class="module-content" id="hazards1">
+                        <div class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <p>Video: Hazards and Preventive measures 1 (4 mins)</p>
+                            </div>
+                            <video class="video-player" controlslist="nodownload noremoteplayback noplaybackrate"
+                                controls>
+                                <!-- <source src="./Hazard 1.mp4" type="video/mp4"> -->
+                                <source src="https://stenciideployment.s3.ap-south-1.amazonaws.com/Hazard+1.mp4"
+                                    type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 1 -->
+                    <div class="module-content" id="quiz1">
+                        <div class="quiz-preview">
+                            <div class="recap-icon">📚</div>
+                            <h2>Let's recap what you have learned so far</h2>
+                            <p>Get ready for a quick quiz to test your knowledge!</p>
+                            <div class="countdown">Starting in 5...</div>
+                        </div>
+                        <div class="quiz-container">
+                            <!-- Question 1 -->
+                            <div class="question_box" data-question-index="0">
+                                <img src="./approaching3.jpg" alt="farmer approaching cow" class="quiz-image">
+                                <div class="question" data-question-index="0" data-audio="./q1.mp3">
+                                    <p style="font-size: 1.5rem;">How should you approach animals in the fields?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="a">
+                                            <span>Quickly to avoid startling them</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="b">
+                                            <span>Calmly, with protective gear and proper training</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="c">
+                                            <span>Loudly so they notice you</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q1" value="d">
+                                            <span>Never, always call for help</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Question 2 -->
+                            <div class="question_box" data-question-index="1" style="display: none;">
+                                <img src="./driving.jpg" alt="driving safely" class="quiz-image">
+                                <div class="question" data-question-index="1" data-audio="./q2.mp3">
+                                    <p style="font-size: 1.5rem;">What is a key safety tip while driving during field
+                                        visits?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="b">
+                                            <span>Follow traffic laws and use IVMS e-mentor</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="a">
+                                            <span>Speed up to cover more clients</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="c">
+                                            <span>Use mobile while driving to save time</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz1-q2" value="d">
+                                            <span>Avoid rest breaks to stay on schedule</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Quiz 1 Completion Screen -->
+                        <div class="quiz-completion" style="display: none;">
+                            <div class="trophy">🏆</div>
+                            <h1>Congratulations!</h1>
+                            <p>You've successfully completed the quiz.<br>Now let's move forward to the next module.</p>
+                            <!-- <button class="continue-btn">Continue</button> -->
+                        </div>
+                    </div>
+
+                    <!-- Video 3 -->
+                    <div class="module-content" id="hazards2">
+                        <div class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <p>Video: Hazards and Preventive measures 2 (3 mins)</p>
+                            </div>
+                            <video class="video-player" controlslist="nodownload noremoteplayback noplaybackrate"
+                                controls>
+                                <!-- <source src="./hazards 2.mp4" type="video/mp4"> -->
+                                <source src="https://stenciideployment.s3.ap-south-1.amazonaws.com/hazards+2.mp4"
+                                    type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 2 -->
+                    <div class="module-content" id="quiz2">
+                        <div class="quiz-preview">
+                            <div class="recap-icon">📚</div>
+                            <h2>Let's recap what you have learned so far</h2>
+                            <p>Get ready for a quick quiz to test your knowledge!</p>
+                            <div class="countdown">Starting in 5...</div>
+                        </div>
+                        <div class="quiz-container">
+                            <!-- question 1 -->
+                            <div class="question_box" data-question-index="0">
+                                <img src="./heat_stress.jpg" alt="heat stress" class="quiz-image">
+                                <div class="question" data-question-index="0" data-audio="./q3.mp3">
+                                    <p style="font-size: 1.5rem;">What should you avoid to prevent heat stress?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="a">
+                                            <span>Drinking caffeine or alcohol</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="b">
+                                            <span>Wearing a cap</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="c">
+                                            <span>Taking breaks</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q1" value="d">
+                                            <span>Hydrating</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- question 2 -->
+                            <div class="question_box" data-question-index="1" style="display: none;">
+                                <img src="./slip.jpg" alt="heat stress" class="quiz-image">
+                                <div class="question" data-question-index="1" data-audio="./q4.mp3">
+                                    <p style="font-size: 1.4rem;">Which of the following is recommended to prevent slips
+                                        and falls?</p>
+                                    <p style="color: green; font-weight: 400; font-style: italic;">Select correct answer
+                                        and then click <strong>Submit</strong> </p>
+                                    <div class="options">
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="a">
+                                            <span>High-heeled shoes</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="b">
+                                            <span>Rubber slippers</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="c">
+                                            <span>Non-slip shoes and staying alert</span>
+                                        </label>
+                                        <label class="option">
+                                            <input type="radio" name="quiz2-q2" value="d">
+                                            <span>Barefoot walking</span>
+                                        </label>
+                                        <button class="submit-quiz">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Quiz 2 Completion Screen -->
+                        <div class="quiz-completion" style="display: none;">
+                            <div class="trophy">🏆</div>
+                            <h1>Congratulations!</h1>
+                            <p>You've successfully completed the quiz.<br>
+                                <!-- Now let's move forward to the next module. -->
+                                Thank you for completing this training module. Good Luck 👍
+                            </p>
+                            <!-- <button class="continue-btn">Continue</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // DOM Elements
+            const modules = document.querySelectorAll('.module');
+            const moduleContents = document.querySelectorAll('.module-content');
+            const nextBtn = document.querySelector('.next-btn');
+            const currentModuleDisplay = document.querySelector('.current-module');
+            const hideSidebarBtn = document.querySelector('.hide-sidebar');
+            const showSidebarBtn = document.querySelector('.show-sidebar');
+            const sidebar = document.querySelector('.sidebar');
+            const submitQuizBtns = document.querySelectorAll('.submit-quiz');
+            const videoPlaceholders = document.querySelectorAll('.video-placeholder');
+            const videoPlayers = document.querySelectorAll('.video-player');
+            const correctAudio = new Audio('./correct.mp3');
+            const wrongAudio = new Audio('./incorrect.mp3');
+            correctAudio.preload = 'auto';
+            wrongAudio.preload = 'auto';
+
+            // Track current module index
+            let currentModuleIndex = 0;
+            const totalModules = modules.length;
+            const completedModules = new Set();
+
+            // Initialize the module
+            function initModule() {
+                updateActiveModule();
+                updateNextButton();
+                checkMobileView();
+
+                // Check if initial module is a quiz
+                if (modules[currentModuleIndex].dataset.module.startsWith('quiz')) {
+                    setupQuizPreview(modules[currentModuleIndex].dataset.module);
+                }
+            }
+
+            // Update active module in sidebar and content
+            function updateActiveModule() {
+                // Update sidebar
+                modules.forEach((module, index) => {
+                    module.classList.toggle('active', index === currentModuleIndex);
+                });
+
+                // Update content with fade animation
+                moduleContents.forEach((content, index) => {
+                    if (index === currentModuleIndex) {
+                        content.classList.add('active');
+
+                        // 🔄 Restart animation
+                        content.classList.remove('fade-in'); // remove if exists
+                        void content.offsetWidth;            // force reflow
+                        content.classList.add('fade-in');    // re-add
+                    } else {
+                        content.classList.remove('active', 'fade-in');
+                    }
+                });
+
+                // Update current module display
+                const activeModule = modules[currentModuleIndex];
+                currentModuleDisplay.textContent = activeModule.querySelector('span').textContent;
+
+                const moduleId = activeModule.dataset.module;
+                const isQuiz = moduleId.startsWith('quiz');
+
+                if (isQuiz && !completedModules.has(currentModuleIndex)) {
+                    nextBtn.disabled = true;
+                } else if (!isQuiz) {
+                    // Check if this module contains a video
+                    const video = document.querySelector(`#${moduleId} .video-player`);
+                    if (video) {
+                        nextBtn.disabled = true;
+
+                        // Enable next only when video ends
+                        const enableNext = () => {
+                            nextBtn.disabled = false;
+                            video.removeEventListener('ended', enableNext); // clean up
+                        };
+
+                        // In case the user has already watched the video before
+                        if (video.ended) {
+                            nextBtn.disabled = false;
+                        } else {
+                            video.addEventListener('ended', enableNext);
+                        }
+                    } else {
+                        nextBtn.disabled = currentModuleIndex === totalModules - 1;
+                    }
+                }
+
+            }
+
+            // Update next button state
+            function updateNextButton() {
+                const currentIndex = currentModuleIndex;
+                nextBtn.disabled = currentIndex >= modules.length - 1;
+            }
+
+            // Mark module as completed
+            function markModuleCompleted(index) {
+                modules[index].classList.add('completed');
+                completedModules.add(index);
+            }
+
+            // Move to next module
+            function goToNextModule() {
+                if (currentModuleIndex < totalModules - 1) {
+                    markModuleCompleted(currentModuleIndex);
+                    currentModuleIndex++;
+                    updateActiveModule();
+                    updateNextButton();
+                    scrollToTop();
+
+                    nextBtn.disabled = true //disabling NXT button for every module start
+
+                    // Check if new module is a quiz
+                    const newModule = modules[currentModuleIndex];
+                    if (newModule.dataset.module.startsWith('quiz')) {
+                        const quizId = newModule.dataset.module;
+                        requestAnimationFrame(() => {   // Wait for DOM to render updated module content
+                            setTimeout(() => {
+                                setupQuizPreview(quizId);
+                            }, 50); // gives the DOM enough time to paint
+                        });
+                    }
+                }
+            }
+
+            // Scroll to top of content area
+            function scrollToTop() {
+                document.querySelector('.content-area').scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Check if mobile view and hide sidebar
+            function checkMobileView() {
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('show');
+                }
+            }
+
+            // Function to stop all playing videos
+            function stopAllVideos() {
+                videoPlayers.forEach(player => {
+                    player.pause();
+                    player.currentTime = 0;
+                    // Show the placeholder again
+                    const placeholder = player.previousElementSibling;
+                    if (placeholder.classList.contains('video-placeholder')) {
+                        placeholder.style.display = 'flex';
+                        player.style.display = 'none';
+                    }
+                });
+            }
+
+            // Event Listeners
+            nextBtn.addEventListener('click', function () {
+                goToNextModule();  // Next button click
+                stopAllVideos();
+            })
+
+            // Handle quiz preview screens with audio
+            function setupQuizPreview(quizId) {
+                const preview = document.querySelector(`#${quizId} .quiz-preview`);
+                const quizContainer = document.querySelector(`#${quizId} .quiz-container`);
+                const countdownElement = preview.querySelector('.countdown');
+
+                // Ensure quiz container is hidden when preview starts
+                quizContainer.style.display = 'none';
+                preview.style.display = 'flex';
+
+                let count = 5;
+                countdownElement.textContent = `Starting in ${count}...`;
+
+                const timer = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        countdownElement.textContent = `Starting in ${count}...`;
+                    } else {
+                        clearInterval(timer);
+                        preview.style.display = 'none';
+                        quizContainer.style.display = 'block';
+
+                        // Play audio for the first question
+                        const firstQuestion = quizContainer.querySelector('.question[data-question-index="0"]');
+                        if (firstQuestion) {
+                            const audioSrc = firstQuestion.dataset.audio;
+                            if (audioSrc) {
+                                const firstAudio = new Audio(audioSrc);
+                                firstAudio.play().catch(err => console.warn('Audio play failed:', err));
+                            }
+                        }
+                    }
+                }, 1000);
+            }
+
+            // Module click in sidebar
+            modules.forEach((module, index) => {
+                module.addEventListener('click', function () {
+                    stopAllVideos();    // Stop any playing videos when switching modules
+                    currentModuleIndex = index;
+                    updateActiveModule();
+                    scrollToTop();
+
+                    const moduleId = this.dataset.module;
+                    if (moduleId.startsWith('quiz')) {
+                        setupQuizPreview(moduleId);
+                    }
+
+                    // Hide sidebar on mobile after selection
+                    if (window.innerWidth <= 992) {
+                        sidebar.classList.remove('show');
+                    }
+                });
+            });
+
+            // Quiz answers (for demo purposes)
+            const quizAnswers = {
+                'quiz1-q1': 'b',
+                'quiz1-q2': 'b',
+                'quiz2-q1': 'a',
+                'quiz2-q2': 'c'
+            };
+
+            // Submit quiz buttons
+            submitQuizBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const questionBlock = this.closest('.question_box');
+                    const input = questionBlock.querySelector('input[type="radio"]:checked');
+                    const questionId = input?.name;
+
+                    // Remove previous feedback
+                    const existingFeedback = questionBlock.querySelector('.quiz-feedback');
+                    if (existingFeedback) existingFeedback.remove();
+
+                    const feedback = document.createElement('div');
+                    feedback.classList.add('quiz-feedback');
+
+                    if (!input) {
+                        feedback.classList.add('incorrect');
+                        feedback.textContent = 'Please select an answer before submitting.';
+                        this.insertAdjacentElement('afterend', feedback);
+                        feedback.style.display = 'block';
+                        return;
+                    }
+
+                    const isCorrect = input.value === quizAnswers[questionId];
+                    input.closest('.option').classList.add('selected');
+
+                    if (isCorrect) {
+                        input.closest('.option').classList.add('correct');
+                        feedback.classList.add('correct');
+                        feedback.textContent = 'Correct! Well Done 👍🎉';
+                        correctAudio.play().catch(e => console.warn('Correct audio failed:', e));
+                    } else {
+                        input.closest('.option').classList.add('incorrect');
+                        feedback.classList.add('incorrect');
+                        feedback.innerHTML = 'Incorrect! 👎 Watch the video or try again.';
+                        wrongAudio.play().catch(e => console.warn('Wrong audio failed:', e));
+                        this.insertAdjacentElement('afterend', feedback);
+                        feedback.style.display = 'block';
+
+                        setTimeout(() => {      // switching to previous module when answered wrong
+                            const prevIndex = currentModuleIndex - 1;
+                            if (prevIndex >= 0) {
+                                currentModuleIndex = prevIndex;
+                                updateActiveModule();
+                                scrollToTop();
+
+                                // Reseting quiz progress
+                                const quizContainer = questionBlock.closest('.quiz-container');
+                                quizContainer.querySelectorAll('.question_box').forEach((qBox, idx) => {
+                                    qBox.style.display = idx === 0 ? 'flex' : 'none';
+                                    qBox.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                                    qBox.querySelectorAll('.option').forEach(o => o.classList.remove('selected', 'correct', 'incorrect'));
+                                    const fb = qBox.querySelector('.quiz-feedback');
+                                    if (fb) fb.remove();
+                                });
+                            }
+                        }, 4000);
+                        return;
+                    }
+                    this.insertAdjacentElement('afterend', feedback);
+                    feedback.style.display = 'block';
+
+                    // Move to next question after a brief delay
+                    const container = questionBlock.closest('.quiz-container');
+                    const currentIndex = parseInt(questionBlock.dataset.questionIndex);
+                    const nextBox = container.querySelector(`.question_box[data-question-index="${currentIndex + 1}"]`);
+
+                    setTimeout(() => {
+                        // hiding entire current question (image + text)
+                        questionBlock.style.display = 'none';
+                        if (nextBox) {
+                            nextBox.style.display = 'flex';  // show full next question_box (flex layout)
+                            const nextQuestion = nextBox.querySelector('.question');
+                            const audioSrc = nextQuestion?.dataset.audio;   // ✅ Play question-specific audio
+                            if (audioSrc) {
+                                const questionAudio = new Audio(audioSrc);
+                                questionAudio.play().catch(err => console.warn('Audio play failed:', err));
+                            }
+                        } else {
+                            const currentModule = document.querySelector('.module.active');     // ✅ Last question of this quiz
+                            currentModule.classList.add('completed');
+
+                            // Hide the quiz container
+                            const quizContainer = questionBlock.closest('.quiz-container');
+                            quizContainer.style.display = 'none';
+
+                            // Show the quiz-completion screen
+                            const completionScreen = quizContainer.parentElement.querySelector('.quiz-completion');
+                            if (completionScreen) {
+                                completionScreen.style.display = 'flex';
+                                createConfetti(completionScreen);   // 🎉 Triggering confetti here
+                                nextBtn.disabled = false;
+                            }
+                        }
+                    }, 3000);
+                });
+            });
+
+            // Video placeholders
+            videoPlaceholders.forEach(video => {
+                video.addEventListener('click', function () {
+                    this.style.display = 'none';     // Hide the placeholder
+
+                    // Show and play the corresponding video player
+                    const videoPlayer = this.nextElementSibling;
+                    videoPlayer.style.display = 'block';
+
+                    // Request fullscreen when playing
+                    if (videoPlayer.requestFullscreen) {
+                        videoPlayer.requestFullscreen().catch(e => {
+                            console.log("Fullscreen error:", e);
+                        });
+                    }
+
+                    videoPlayers.forEach(video => {
+                        video.addEventListener('contextmenu', e => e.preventDefault());   // prevent right-click control
+                        video.addEventListener('keydown', e => {    // preventing using keyboard shortcuts to skip video
+                            if (['<', '>', '+', '-', '=', '_'].includes(e.key)) e.preventDefault();
+                        });
+                    });
+
+                    videoPlayer.play();
+
+                    // When video ends, show the placeholder again
+                    videoPlayer.addEventListener('ended', function () {
+                        // Exit fullscreen if we're in it
+                        if (document.fullscreenElement) {
+                            document.exitFullscreen().catch(e => {
+                                console.log("Exit fullscreen error:", e);
+                            });
+                        }
+                        video.style.display = 'flex';
+                        this.style.display = 'none';
+                    });
+                });
+            });
+
+            // Sidebar toggle buttons
+            hideSidebarBtn.addEventListener('click', function () {
+                sidebar.classList.remove('show');
+            });
+
+            showSidebarBtn.addEventListener('click', function () {
+                sidebar.classList.add('show');
+            });
+
+            // Window resize event
+            window.addEventListener('resize', checkMobileView);
+
+            // Initialize the module
+            initModule();
+
+            // Add hamburger menu event listener
+            hamburgerMenu.addEventListener('click', function () {
+                sidebar.classList.toggle('show');
+            });
+
+            // Update the checkMobileView function
+            function checkMobileView() {
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('show');
+                    hamburgerMenu.style.display = 'block';
+                } else {
+                    sidebar.classList.add('show');
+                    hamburgerMenu.style.display = 'none';
+                }
+            }
+
+            // Create confetti effect
+            function createConfetti(container) {
+                const colors = ['#6C63FF', '#FF6584', '#4FD1C5', '#F6E05E', '#FC8181'];
+
+                for (let i = 0; i < 80; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+                    const size = Math.random() * 8 + 4;
+                    confetti.style.width = size + 'px';
+                    confetti.style.height = size + 'px';
+
+                    container.appendChild(confetti);
+
+                    const animation = confetti.animate([
+                        { top: '-10px', opacity: 1, transform: `rotate(0deg)` },
+                        { top: '90%', opacity: 0, transform: `rotate(${Math.random() * 360}deg)` }
+                    ], {
+                        duration: Math.random() * 3000 + 2000,
+                        delay: Math.random() * 500,
+                        easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                    });
+                    animation.onfinish = () => confetti.remove();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
