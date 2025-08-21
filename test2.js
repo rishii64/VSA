@@ -244,6 +244,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!input) {
                 feedback.classList.add('incorrect');
                 feedback.textContent = 'Please select an answer before submitting.';
+                setTimeout(() => {
+                    feedback.classList.remove('incorrect');
+                    feedback.textContent = '';
+                }, 2000);
                 this.insertAdjacentElement('afterend', feedback);
                 feedback.style.display = 'block';
                 return;
